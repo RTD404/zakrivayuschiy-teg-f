@@ -20,6 +20,7 @@
   background-color: var(--bg-color);
   background-image: var(--bg-image);
   background-size: cover;
+  background-attachment: fixed;
   min-inline-size: 320px;
   min-block-size: 100dvb;
   font-variation-settings: 'wght' var(--font-weight-text);
@@ -114,42 +115,56 @@
 }
 
 .main {
-  display: flex;
-  flex-direction: column;
-  gap: 50px;
   margin: 100px auto auto auto;
   inline-size: clamp(320px, 100%, 700px);
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
+  margin-block-end: 50px;
   border: 2px solid var(--accent-color);
   background-color: var(--bg-color);
 }
 
 .card__title {
-  padding: 4px 4px 4px 10px;
+  border-bottom: 2px solid var(--accent-color);
+  padding: 5px 10px;
   color: var(--accent-color, #000);
   font-size: 18px;
   font-variation-settings: 'wght' var(--font-weight-title);
 }
 
-.card__text {
-  display: flex;
-  padding: 0 25px 25px 25px;
-  color: var(--accent-color);
-  font-weight: var(--font-weight-text);
-  font-size: 18px;
-  line-height: 116.667%;
+.card__image-wrapper {
+  position: relative;
+}
+
+.card__image-label {
+  position: absolute;
+  top: 0.1rem;
+  right: 10px;
+  margin: 27px 15px 0 0;
+  opacity: 0.5;
+  color: var(--accent-color, #000);
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 14px;
+  text-transform: uppercase;
+  text-shadow: -1px 0 var(--shadow-color), 0 1px var(--shadow-color), 1px 0 var(--shadow-color), 0 -1px var(--shadow-color);
+  mix-blend-mode: hard-light;
+}
+
+@supports((text-stroke: 1px var(--shadow-color)) or (-webkit-text-stroke: 1px var(--shadow-color))) {
+  .card__image-label {
+      text-shadow: none;
+      -webkit-text-stroke: 1px var(--shadow-color);
+      text-stroke: 1px var(--shadow-color);
+  }
 }
 
 .card__image {
-  max-width: 100%;
-  margin-bottom: 25px;
-  border-top: 2px solid var(--accent-color);
-  border-bottom: 2px solid var(--accent-color);
-  object-fit: fill;
+  display: block;
+  object-fit: cover;
+  max-inline-size: 100%;
+  aspect-ratio: 1 / 1;
 }
 
 .filter-null-start {
@@ -184,38 +199,27 @@
   filter: contrast(150%);
 }
 
-.card__image-wrapper {
-  position: relative;
+.card__content {
+  border-top: 2px solid var(--accent-color);
+  padding: 25px;
 }
 
-.card__image-label {
-  position: absolute;
-  top: 0.1rem;
-  right: 10px;
-  margin: 30px 15px 0 0;
-  opacity: 0.5;
-  color: var(--accent-color, #000);
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 14px;
-  text-transform: uppercase;
-  text-shadow: -1px 0 var(--shadow-color), 0 1px var(--shadow-color), 1px 0 var(--shadow-color), 0 -1px var(--shadow-color);
-  mix-blend-mode: hard-light;
+.card__text {
+  color: var(--accent-color);
+  font-size: 18px;
+  line-height: 116.667%;
+  font-variation-settings: 'wght' var(--font-weight-text);
 }
 
-@supports((text-stroke: 1px var(--shadow-color)) or (-webkit-text-stroke: 1px var(--shadow-color))) {
-  .card__image-label {
-      text-shadow: none;
-      -webkit-text-stroke: 1px var(--shadow-color);
-      text-stroke: 1px var(--shadow-color);
-  }
+.card__text:not(:last-child) {
+  margin-block-end: 27px;
 }
 
 .card__buttons-wrapper {
   display: flex;
-  align-self: end;
+  justify-content: end;
   gap: 4px;
-  padding: 0 25px 25px 0;
+  margin: 0 25px 25px 0;
 }
 
 .card__icon-button {
@@ -236,8 +240,8 @@
 }
 
 .like-icon {
-  inline-size: 39px;
   box-sizing: 36px;
+  inline-size: 39px;
 }
 
 .core,
@@ -265,14 +269,14 @@
 
 .card__like-button {
   min-width: 130px;
+  padding: 9px 17px;
 }
 
 .card__save-button {
   gap: 8px;
   min-width: clamp(306px, calc(100vw - 60px), 339px);
   margin: auto;
-  margin-block-start: 3.36rem;
-  margin-block-end: 6.5rem;
+  margin: 0 auto 105px;
   padding: 15px 20px;
   color: var(--accent-color);
 }
@@ -298,7 +302,7 @@
   cursor: pointer;
 }
 
-.animated-button span {
+.button__text {
   position: relative;
   z-index: 2;
   color: var(--hover-color);
@@ -332,6 +336,7 @@
 }
 
 .dialog__svg {
+  fill: var(--accent-color);
   inline-size: 39px;
   block-size: 39px;
 }
@@ -345,12 +350,15 @@
 }
 
 .dialog__text {
-  color: var(--accent-color);
+  position: relative;
+  z-index: 2;
+  color: var(--hover-color);
   font-family: var(--font-family);
   font-weight: 400;
   font-size: 14px;
   line-height: 1.5; /* 21px */
   text-transform: uppercase;
+  mix-blend-mode: difference;
 }
 
 .dialog__button {
@@ -362,11 +370,16 @@
   inline-size: 100%;
 }
 
-dialog::backdrop {
+.dialog::backdrop {
   background-color: rgb(0 0 0 / 0.75);
 }
 
 @media (width <= 375px) {
+
+  .card__image-label {
+    margin: 23px 0 0 0;
+  }
+
   .card__save-button {
     flex-direction: column;
   }
