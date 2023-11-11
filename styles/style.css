@@ -97,6 +97,7 @@
   content: '▶';
   position: absolute;
   inset-inline-start: -20px;
+  inset-block-end: 0;
 }
 
 .theme-menu__button:focus {
